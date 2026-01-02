@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Nomenclatura</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+body {
+  box-sizing: border-box;
+  font-family: 'Century Gothic', 'CenturyGothic', system-ui, -apple-system, sans-serif;
+}
+
+/* Refuerzo para evitar que Tailwind lo pise */
+h1, h2, h3, p, span, div, li, button {
+  font-family: 'Century Gothic', 'CenturyGothic', system-ui, -apple-system, sans-serif;
+}
+    
+.resultado-box {
+  background: linear-gradient(135deg, #193c68 0%, #244f87 100%);
+  border: 3px solid #f1e861;
+  box-shadow: 0 8px 24px rgba(241, 232, 97, 0.35);
+}
+    
+    .input-field {
+      transition: all 0.3s ease;
+    }
+    
+.input-field:focus {
+  border-color: #f1e861;
+  box-shadow: 0 0 0 3px rgba(241, 232, 97, 0.25);
+}
+    
+.btn-copy {
+  background: #f1e861;
+  color: #193c68;
+  transition: all 0.3s ease;
+}
+
+.btn-copy:hover {
+  background: #e6da4f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(241, 232, 97, 0.4);
+}
+    
+.version-badge {
+  background: #f1e861;
+  color: #193c68;
+  font-weight: bold;
+}
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gray-50">
+  <div class="h-full w-full overflow-auto">
+   <div class="min-h-full w-full px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+     <header class="text-center mb-8">
+      <h1 id="main-title" class="text-4xl font-bold mb-2" style="color: #193c68;">Calculadora de Nomenclatura de Archivos</h1>
+      <p id="subtitle" class="text-lg" style="color: #193c68; opacity: 0.8;">Genera nombres de archivos</p>
+     </header>
+     <main>
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div><label for="mes" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Mes</label> <select id="mes" class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none"> <option value="">Selecciona un mes</option> <option value="01">Enero</option> <option value="02">Febrero</option> <option value="03">Marzo</option> <option value="04">Abril</option> <option value="05">Mayo</option> <option value="06">Junio</option> <option value="07">Julio</option> <option value="08">Agosto</option> <option value="09">Septiembre</option> <option value="10">Octubre</option> <option value="11">Noviembre</option> <option value="12">Diciembre</option> </select>
+        </div>
+        <div><label for="anio" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Año (2 dígitos)</label> <input type="number" id="anio" min="0" max="99" placeholder="Ej: 25" class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none">
+        </div>
+        <div><label for="siglas" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Siglas / Categoría</label> <select id="siglas" class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none"> <option value="">Selecciona categoría</option> <option value="WC">WC - Working Capital</option> <option value="MKT">MKT - Marketing</option> <option value="FIN">FIN - Finanzas</option> <option value="HR">HR - Recursos Humanos</option> <option value="IT">IT - Tecnología</option> <option value="OPS">OPS - Operaciones</option> <option value="VEN">VEN - Ventas</option> <option value="ADM">ADM - Administración</option> <option value="LEG">LEG - Legal</option> <option value="COM">COM - Comunicación</option> </select>
+        </div>
+        <div><label for="cliente" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Cliente</label> <input type="text" id="cliente" placeholder="Ej: FIFA" class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none">
+        </div>
+        <div><label for="proyecto" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Proyecto</label> <input type="text" id="proyecto" placeholder="Ej: EVENTOCIERRE" class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none">
+        </div>
+        <div><label for="info" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Info Adicional <span class="text-sm font-normal opacity-70">(Opcional)</span></label> <input type="text" id="info" placeholder="Ej: PRESUPUESTO" class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none">
+        </div>
+       </div>
+       <div class="mb-6"><label for="version" class="block text-sm font-semibold mb-2" style="color: #1d2141;">Versión</label>
+        <div class="flex items-center gap-3"><input type="number" id="version" value="1" min="1" class="input-field w-24 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-center font-bold"> <span class="version-badge px-4 py-2 rounded-full text-sm">V<span id="version-display">1</span></span>
+        </div>
+       </div>
+       <div class="resultado-box rounded-2xl p-6 mb-4"><label class="block text-sm font-semibold mb-3 text-white opacity-90">Nombre Generado:</label>
+        <div class="bg-white bg-opacity-10 rounded-lg p-4 mb-4">
+         <p id="resultado" class="text-xl font-mono font-bold text-white break-all">Completa los campos para generar el nombre</p>
+        </div><button id="btnCopy" class="btn-copy w-full py-3 px-6 rounded-lg font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled> 📋 Copiar Nombre </button>
+       </div>
+       <div class="bg-yellow-50 rounded-lg p-4 border-2" style="border-color:#f1e861;">
+        <p class="text-sm font-semibold mb-2" style="color: #1d2141;">📝 Formato de nomenclatura:</p>
+        <p class="text-sm font-mono" style="color: #1d2141;">Fecha_Siglas_Cliente_Proyecto_Info_Vf</p>
+        <p class="text-xs mt-2 opacity-75" style="color: #1d2141;">Ejemplo: 0425_WC_FIFA_EVENTOCIERRE_V1</p>
+       </div>
+      </div>
+     </main>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Calculadora de Nomenclatura de Archivos",
+      subtitle: "Genera nombres de archivos consistentes y profesionales"
+    };
+
+    const config = {};
+
+    async function onConfigChange(cfg) {
+      const mainTitle = document.getElementById('main-title');
+      const subtitle = document.getElementById('subtitle');
+      
+      if (mainTitle) {
+        mainTitle.textContent = cfg.main_title || defaultConfig.main_title;
+      }
+      if (subtitle) {
+        subtitle.textContent = cfg.subtitle || defaultConfig.subtitle;
+      }
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ["main_title", cfg.main_title || defaultConfig.main_title],
+        ["subtitle", cfg.subtitle || defaultConfig.subtitle]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    const inputs = {
+      mes: document.getElementById('mes'),
+      anio: document.getElementById('anio'),
+      siglas: document.getElementById('siglas'),
+      cliente: document.getElementById('cliente'),
+      proyecto: document.getElementById('proyecto'),
+      info: document.getElementById('info'),
+      version: document.getElementById('version')
+    };
+
+    const resultado = document.getElementById('resultado');
+    const btnCopy = document.getElementById('btnCopy');
+    const versionDisplay = document.getElementById('version-display');
+
+    function generarNomenclatura() {
+      const mes = inputs.mes.value;
+      const anio = inputs.anio.value.padStart(2, '0');
+      const siglas = inputs.siglas.value;
+      const cliente = inputs.cliente.value.toUpperCase().trim();
+      const proyecto = inputs.proyecto.value.toUpperCase().trim();
+      const info = inputs.info.value.toUpperCase().trim();
+      const version = inputs.version.value;
+
+      if (!mes || !anio || !siglas || !cliente || !proyecto) {
+        resultado.textContent = 'Completa los campos obligatorios para generar el nombre';
+        btnCopy.disabled = true;
+        return '';
+      }
+
+      const partes = [
+        mes + anio,
+        siglas,
+        cliente,
+        proyecto
+      ];
+
+      if (info) {
+        partes.push(info);
+      }
+
+      partes.push('V' + version);
+
+      const nombreGenerado = partes.join('_');
+      resultado.textContent = nombreGenerado;
+      btnCopy.disabled = false;
+      
+      return nombreGenerado;
+    }
+
+    Object.values(inputs).forEach(input => {
+      input.addEventListener('input', () => {
+        if (input.id === 'version') {
+          versionDisplay.textContent = input.value || '1';
+        }
+        generarNomenclatura();
+      });
+    });
+
+    btnCopy.addEventListener('click', () => {
+      const texto = resultado.textContent;
+      
+      if (!texto || texto === 'Completa los campos obligatorios para generar el nombre') {
+        return;
+      }
+      
+      // Método alternativo para copiar que funciona en más navegadores
+      const textArea = document.createElement('textarea');
+      textArea.value = texto;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        const textoOriginal = btnCopy.textContent;
+        btnCopy.textContent = '✅ ¡Copiado!';
+        btnCopy.style.background = '#4ade80';
+        
+        setTimeout(() => {
+          btnCopy.textContent = textoOriginal;
+          btnCopy.style.background = '#f8fb1d';
+        }, 2000);
+      } catch (err) {
+        console.error('Error al copiar:', err);
+      }
+      
+      document.body.removeChild(textArea);
+    });
+
+    generarNomenclatura();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ae1d1922366b6ac',t:'MTc2NTc1ODQ4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
